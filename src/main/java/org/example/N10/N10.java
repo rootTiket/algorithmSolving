@@ -12,7 +12,7 @@ public class N10 {
         Scanner sc = new Scanner(System.in);
         String input = sc.next();
         String target = sc.next();
-        int i = 1;
+        int i = 1000;
         List<Integer> checkIndex = new ArrayList<>();
         List<Integer> result = new ArrayList<>();
         char[] arr = input.toCharArray();
@@ -21,20 +21,20 @@ public class N10 {
                 i = 0;
                 checkIndex.add(i);
             } else {
+                i++;
                 checkIndex.add(i);
             }
-            i++;
         }
         List<Integer> checkIndex2 = new ArrayList<>();
-        i = 1;
+        i = 1000;
         for (int j = input.length()-1; j >= 0; j--) {
             if (arr[j] == target.charAt(0)) {
                 i = 0;
                 checkIndex2.add(i);
             } else {
                 checkIndex2.add(i);
+                i ++;
             }
-            i ++;
         }
 
         for (int j = 0; j < input.length(); j++) {
