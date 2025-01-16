@@ -4,58 +4,71 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class N10 {
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
         String input = sc.next();
         String target = sc.next();
-        int i = 1000;
-        List<Integer> checkIndex = new ArrayList<>();
-        List<Integer> result = new ArrayList<>();
-        char[] arr = input.toCharArray();
-        for (int j = 0; j<input.length();j++) {
-            if (arr[j] == target.charAt(0)) {
-                i = 0;
-                checkIndex.add(i);
+
+        List<String> inputList = new ArrayList<>(Arrays.asList(input.split("")));
+
+        List<Integer> answer = new ArrayList<>();
+
+        List<Integer> targetIndexes = createTargetIndexes(inputList, target);
+
+        for (int i = 0 ; i < inputList.size(); i++) {
+            String s = inputList.get(i);
+            if (isTarget(s, target)) {
+                answer.add(0);
             } else {
-                i++;
-                checkIndex.add(i);
-            }
-        }
-        List<Integer> checkIndex2 = new ArrayList<>();
-        i = 1000;
-        for (int j = input.length()-1; j >= 0; j--) {
-            if (arr[j] == target.charAt(0)) {
-                i = 0;
-                checkIndex2.add(i);
-            } else {
-                checkIndex2.add(i);
-                i ++;
+                answer.add(calculateDistance(targetIndexes, i));
             }
         }
 
-        for (int j = 0; j < input.length(); j++) {
-            if (checkIndex.get(j) < checkIndex2.get(input.length() - 1 - j)) {
-                result.add(checkIndex.get(j));
-            } else if (checkIndex.get(j) > checkIndex2.get(input.length() - 1 - j)) {
-                result.add(checkIndex2.get(input.length() - 1 - j));
-            } else if (checkIndex.get(j) == checkIndex2.get(input.length() - 1 - j)) {
-                result.add(checkIndex.get(j));
-            } else {
-                result.add(0);
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        for (Integer k : result) {
-            sb.append(k);
-            sb.append(" ");
-        }
+        String str = answer.toString().replaceAll("[^0-9 ]","");
+
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        bw.write(sb.toString());
+        bw.write(str);
         bw.flush();
         bw.close();
+    }
+
+    public static boolean isTarget(String s, String t) {
+        return s.equals(t);
+    }
+
+    public static List<Integer> createTargetIndexes(List<String> input, String target) {
+        List<Integer> targetIndexes = new ArrayList<>();
+
+        for (int i =0 ; i<input.size(); i++) {
+            String s = input.get(i);
+            if (s.equals(target)) {
+                targetIndexes.add(i);
+            }
+        }
+
+        return targetIndexes;
+    }
+
+    public static int calculateDistance(List<Integer> targetIndexes, int element) {
+        int min = 1000;
+        for (Integer i : targetIndexes) {
+            int current = i - element;
+
+            if (current < 0) {
+                current = -current;
+            }
+
+            if ((current) < min) {
+                min = current;
+            }
+        }
+        return min;
     }
 }
